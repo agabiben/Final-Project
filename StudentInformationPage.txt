@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Configuration;
+
+using System.Data;
+using System.Data.SqlClient;
+
+
+namespace FinalProject
+{
+    public partial class StudentInformationPage : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+              try
+            {
+
+                SqlConnection StudentInfor = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionStringBen"].ConnectionString);
+                StudentInfor.Open();
+                string insert = "insert into StudentInfor (StudentID, StudentName, Discipline, Subject, SubjectNo, Date, Hours, Attendance) values (@StudentID ,@StudentName ,@Discipline ,@Subject ,@SubjectNo ,@Date ,@Hours,@Attendance)";
+                SqlCommand com = new SqlCommand(insert, StudentInfor);
+
+                com.Parameters.AddWithValue("@StudentID", TextBox1.Text);
+                com.Parameters.AddWithValue("@StudentName", TextBox2.Text);
+                com.Parameters.AddWithValue("@Discipline", TextBox3.Text);
+                com.Parameters.AddWithValue("@Subject", TextBox4.Text);
+                com.Parameters.AddWithValue("@SubjectNo", TextBox5.Text);
+                com.Parameters.AddWithValue("@Date", TextBox6.Text);
+                com.Parameters.AddWithValue("@Hours", DropDownList1.SelectedItem.ToString());
+                com.Parameters.AddWithValue("@Attendance", DropDownList2.SelectedItem.ToString());
+
+                com.ExecuteNonQuery();
+                StudentInfor.Close();
+
+                TextBox1.Text = "";
+                TextBox2.Text = "";
+                TextBox3.Text = "";
+                TextBox4.Text = "";
+                TextBox5.Text = "";
+                TextBox6.Text = "";
+                DropDownList1.Text = "";
+                DropDownList2.Text = "";
+                
+
+                Response.Redirect("ModifyPage.aspx");
+            }
+            catch (Exception ex)
+            {
+                Response.Write("Stop: " + ex.ToString());
+            }
+                        
+
+        
+
+        }
+    }
+}
